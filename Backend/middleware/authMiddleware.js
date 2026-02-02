@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import User from '../models/User.js'
 
 // Middleware for protect the routes
-export const protect = async (requestAnimationFrame,resizeBy,next)=>{
+export const protect = async (req,res,next)=>{
     let token
 
     // Verifie if the header Authorization exsite and start by Bearer
