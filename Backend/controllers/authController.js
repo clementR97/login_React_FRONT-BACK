@@ -117,7 +117,7 @@ export const forgotPassword = async(req,res)=>{
         // product mode send a email with nodemail
         res.json({
             message:'Email de reinitialisation envoyé(Ethereal)',
-            resetToken
+            // resetToken
         }) 
 
     }catch(error){
