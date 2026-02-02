@@ -101,7 +101,7 @@ export const forgotPassword = async(req,res)=>{
         .digest('hex')
 
         // define a date of expirate
-        user.resetPasswordExpire = Date.now()+10*60*1000
+        user.resetPasswordExpires = Date.now()+10*60*1000
         // save in the database
         await user.save()
 
@@ -128,7 +128,7 @@ export const resetPassword = async(req,res)=>{
 
                         const user = await User.findOne({
                             resetPasswordToken,
-                            resetPasswordExpire:{$gt: Date.now()}
+                            resetPasswordExpires:{$gt: Date.now()}
                         })
 
                 if(!user){
@@ -140,7 +140,7 @@ export const resetPassword = async(req,res)=>{
 
                 // delete the token of reinitilise 
                 user.resetPasswordToken = undefined
-                user.resetPasswordExpire = undefined
+                user.resetPasswordExpires = undefined
                 await user.save()
                 res.json({
                     message: 'Mot de passe réinitialisé avec succes'

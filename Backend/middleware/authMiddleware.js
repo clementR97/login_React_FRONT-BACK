@@ -8,7 +8,7 @@ export const protect = async (req,res,next)=>{
     // Verifie if the header Authorization exsite and start by Bearer
     if(
         req.headers.authorization && 
-        req.headers.authorization.startWith('Bearer')
+        req.headers.authorization.startsWith('Bearer')
     ){
         try{
             // Recover the token (format: "Bearer token")

@@ -1,17 +1,17 @@
 import mongoose from "mongoose"
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 // Défine le Schema
 const userSchema = new mongoose.Schema(
     {
     name:{
         type: String,
-        require:[true, 'le nom est requis'],
+        require:[true, 'le nom est required'],
         trim: true
 
     },
         email:{
             type: String,
-            require:[true,'Adresse mail requis'],
+            required:[true,'Adresse mail required'],
             unique: true,
             lowercase: true,
             match: [/^\S+@\S+\.\S+$/, 'Email invalide']
@@ -19,14 +19,14 @@ const userSchema = new mongoose.Schema(
                     password:{
                         // password is stored as a string 
                         type: String,
-                        require:[true,'Mot de passe requis'],
+                        require:[true,'Mot de passe requied'],
                         minlength: [6, 'le mot de passe doit contenir au moins 6 caractères'],
                         // The field is NOT returned by default during MongoDB requests.
                         select: false
                     },
                             // stored a temporary token 
                             resetPasswordToken: String,
-                            resetPasswordExpire : Date
+                            resetPasswordExpires : Date
 
     },
         {
@@ -35,13 +35,13 @@ const userSchema = new mongoose.Schema(
         // middleware: Hasing  and verify password
         
 )
-            userSchema.pre('save',async function(next){
-                if(!this.isModified('password')){
-                    return next()
-                }
+            userSchema.pre('save',async function(){
+                if(!this.isModified('password')) return
+                    
+                
               const salt = await bcrypt.genSalt(10)
               this.password = await bcrypt.hash(this.password, salt)
-              next()
+              
         })
 
         // compare password
