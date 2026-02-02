@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import jwt from 'jsonwebtoken'
 import crypto from 'crypto'
+import sendEmail from "../utils/sendEmail.js";
 
 // generate JWT
 const generateToken = (id)=>{
@@ -104,10 +105,18 @@ export const forgotPassword = async(req,res)=>{
         user.resetPasswordExpires = Date.now()+10*60*1000
         // save in the database
         await user.save()
-
+        
+        const resetUrl = `http://localhost:2000/reset-password/${resetToken}`
+        await sendEmail({
+            to: user.email,
+            subject: 'Reinitialisation du mot de passe',
+            text: `Clique ici pour réinitialiser ton mot de passe:${resetUrl}` 
+        })
+        // it return also the token in console.log for test
+        console.log('token pour test:',resetToken)
         // product mode send a email with nodemail
         res.json({
-            message:'Email de reinitialisation envoyé',
+            message:'Email de reinitialisation envoyé(Ethereal)',
             resetToken
         }) 
 
