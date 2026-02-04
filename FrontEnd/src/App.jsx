@@ -1,15 +1,17 @@
 import { useState } from 'react'
-import 'bootstrap/dist/css/bootstrap.css';
-import viteLogo from '/vite.svg'
+import Login from './Components/login.jsx'
+
 import './App.css'
 
 function App() {
   
 
   return (
-    <div>
-
-    </div>
+    
+          <>
+          <Login/>
+          </>
+    
   )
 }
 
