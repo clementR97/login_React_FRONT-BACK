@@ -69,7 +69,7 @@ const [open,setOpen] = useState(false)
 const handleClickOpen = ()=>{
     setOpen(true)
 }
-const handleClickClose = ()=>{
+const handleClose = ()=>{
     setOpen(false)
 }
 
@@ -113,7 +113,106 @@ const validateInputs = ()=>{
 
     return(
         <>
-        <h1>hello</h1>
+        <CssBaseline enableColorScheme/>
+        <SignInContainer direction="column" justifyContent="space-between">
+            {/* <ColorModeSelect sx={{position: 'fixed',top:'1rem',right:'1rem'}}/> */}
+            <Card cariant="outlined">
+                {/* logo <SitmarkIcon/> */}
+                <Typography component="h1" variant="h4" sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)'}}>
+                    Sign in
+                </Typography>
+                <Box component="form" onSubmit={handleSubmit}
+                noValidate sx={{
+                    display:'flex',
+                    flexDirection:'column',
+                    width:'100%',
+                    gap:2,
+                }}>
+                    <FormControl>
+                    <FormLabel htmlFor='email'>Email</FormLabel>
+                    <TextField
+                    error={emailError}
+                    helperText={emailErrorMessage}
+                    id='email'
+                    type='email'
+                    name='email'
+                    placeholder='your@email.com'
+                    autoComplete='email'
+                    autoFocus
+                    required
+                    fullWidth
+                    variant='outlined'
+                    color={emailError ? 'error': 'primary'}
+                    />
+                    </FormControl>
+                    <FormControl>
+                        <FormLabel htmlFor='password'>Password</FormLabel>
+                        <TextField
+                        error={passwordError}
+                        helperText={passwordErrorMessage}
+                        id='password'
+                        type='password'
+                        name='password'
+                        placeholder='••••••'
+                        autoComplete='current-password'
+                        autoFocus
+                        required
+                        fullWidth
+                        variant='outlined'
+                        color={passwordError ? 'error' : 'primary'}/>
+                    </FormControl>
+                    <FormControlLabel
+                        control={<Checkbox value='remember' color='primary'/>}
+                        label='Remember me'
+                        />
+                        {/* <ForgotPassword open={open} handleClose={handleClose}/> */}
+                        <Button
+                        type='submit'
+                        fullWidth
+                        variant='contained'
+                        onClick={validateInputs}>
+                            Sign in
+                        </Button>
+                        <Link
+                        component='button'
+                        type='button'
+                        onClick={handleClickOpen}
+                        variant='body2'
+                        sx={{alignSelf: 'center'}}>
+                            Forgot your password?
+                        </Link>
+                </Box>
+                <Divider>or</Divider>
+                <Box sx={{display: 'flex', flexDirection:'column', gap:2}}>
+                    <Button 
+                    fullWidth
+                    variant='outlined'
+                    onClick={()=> alert('Sign in with Google')}
+                    // startIcon={<GoogleIcon/>}
+                    >
+                        Sign in with Google
+                    </Button>
+                    <Button
+                        fullWidth
+                        variant="outlined"
+                        onClick={() => alert('Sign in with Facebook')}
+                        //   startIcon={<FacebookIcon />}
+                        >
+                        Sign in with Facebook
+                        </Button>
+                <Typography sx={{ textAlign: 'center'}}>
+                Don&apos;t have an account?{' '}
+                        <Link 
+                        href='lien vers crer un compte'
+                        variant='body2'
+                        sx={{alignSelf: 'center'}}
+                        >
+                            Sign up
+                        </Link>
+                </Typography>
+                </Box>
+            </Card>
+        </SignInContainer>
         </>
     )
 }
