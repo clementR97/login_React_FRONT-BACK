@@ -86,7 +86,7 @@ import { useState } from "react";
                                             <MenuItem>Blog</MenuItem>
 
                                             <Divider sx={{my:3}}/>
-                                            <MenuItem>
+                                             <MenuItem>
                                                 <Button color="primary" variant="contained" fullWidth>
                                                     Sign up
                                                 </Button>
@@ -94,7 +94,7 @@ import { useState } from "react";
                                                     Sign in
                                                 </Button>
 
-                                            </MenuItem>
+                                            </MenuItem> 
                                     </Box>
 
                                 </Drawer>
