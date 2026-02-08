@@ -13,6 +13,7 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 
 import { SitemarkIcon } from "../CustomIcon";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
     const StyledToolbar = styled(Toolbar)(({theme})=>({
             display:'flex',
@@ -62,7 +63,8 @@ import { useState } from "react";
                                 </Box>
                             </Box>
                             <Box sx={{display:{xs: 'none',md:'flex'},gap:1, alignItems:'center',}}>
-                                <Button color="primary" variant="text" size="small">Sign in</Button>
+                                <Button component={Link} to="/Sign-in" color="primary" variant="text" size="small">Sign in</Button>
+                                {/* <Link sx={{borderRadius:1, border:1, with:"15px",height:"10px"}} to="/Sign-in" >Sign in</Link> */}
                                 <Button color="primary" variant="contained" size="small">Sign up</Button>
                             </Box>
                             <Box sx={{display:{xs:'flex',md:'none'},gap:1}}>
