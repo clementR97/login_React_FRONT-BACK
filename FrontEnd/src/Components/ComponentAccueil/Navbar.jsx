@@ -65,7 +65,7 @@ import { Link } from "react-router-dom";
                             <Box sx={{display:{xs: 'none',md:'flex'},gap:1, alignItems:'center',}}>
                                 <Button component={Link} to="/Sign-in" color="primary" variant="text" size="small">Sign in</Button>
                                 {/* <Link sx={{borderRadius:1, border:1, with:"15px",height:"10px"}} to="/Sign-in" >Sign in</Link> */}
-                                <Button color="primary" variant="contained" size="small">Sign up</Button>
+                                <Button component={Link} to="/Sign-up" color="primary" variant="contained" size="small">Sign up</Button>
                             </Box>
                             <Box sx={{display:{xs:'flex',md:'none'},gap:1}}>
                                 <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
