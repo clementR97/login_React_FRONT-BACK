@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Login from './Components/login.jsx'
 import SignUp from './Components/SignUp.jsx'
 import Accueil from './Components/Accueil.jsx'
-import {BrowserRouter,Routes,Route} from 'react-router-dom'
+import {BrowserRouter,Routes,Route,Navigate} from 'react-router-dom'
 import './App.css'
 
 function App() {
@@ -15,10 +15,9 @@ function App() {
               <Route path='/' element={<Accueil/>}/>
               <Route path='/Sign-in' element={<Login/>}/>
               <Route path='/Sign-up' element={<SignUp/>}/>
-              {/* <Route path='*' element={<PageNotFound/>}/> */}
+              <Route path='*' element={<Navigate to="/" replace />} />
             </Routes>
-          {/* <Login/> */}
-          {/* <SignUp/> */}
+          
           </BrowserRouter>
     
   )
