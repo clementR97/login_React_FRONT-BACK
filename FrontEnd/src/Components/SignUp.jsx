@@ -6,7 +6,7 @@ import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
-import Link from '@mui/material/Link';
+// import {Link as MuiLink} from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
@@ -14,6 +14,7 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import { GoogleIcon,FacebookIcon,SitemarkIcon } from './CustomIcon.jsx'
 import { useState } from 'react';
+ import { Link as RouterLink } from 'react-router-dom';
 const Card = styled(MuiCard)(({theme})=>({
     display:'flex',
     flexDirection: 'column',
@@ -118,7 +119,10 @@ const SignUp =()=>{
             <CssBaseline enableColorScheme/>
             <SignUpContainer direction="column" justifyContent="space-between">
                 <Card variant='outlined'>
-                    <SitemarkIcon/>
+                <RouterLink to="/">
+                 <SitemarkIcon/>
+                 </RouterLink>
+                 
                     <Typography
                     component="h1"
                     variant='h4'
@@ -207,13 +211,14 @@ const SignUp =()=>{
                         </Button>
                         <Typography sx={{ textAlign: 'center' }}>
                                 Already have an account?{' '}
-                                <Link
-                                    href="/material-ui/getting-started/templates/sign-in/"
+                                <RouterLink
+                                    
+                                    to="/Sign-in"
                                     variant="body2"
                                     sx={{ alignSelf: 'center' }}
                                 >
                                     Sign in
-                                </Link>
+                                </RouterLink>
                                 </Typography>
                     </Box>
                 </Card>

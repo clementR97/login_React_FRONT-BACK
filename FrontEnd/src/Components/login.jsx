@@ -7,14 +7,14 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Divider from '@mui/material/Divider';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import { GoogleIcon,FacebookIcon,SitemarkIcon } from './CustomIcon.jsx';
-
+import { Link } from 'react-router-dom';
 import ForgotPassword from './ForgotPassword.jsx';
 
 const Card = styled(MuiCard)(({theme})=>({
@@ -120,7 +120,12 @@ const validateInputs = ()=>{
         <SignInContainer direction="column" justifyContent="space-between">
             {/* <ColorModeSelect sx={{position: 'fixed',top:'1rem',right:'1rem'}}/> */}
             <Card cariant="outlined">
+                 
+                 <Link to="/">
                  <SitemarkIcon/>
+                 </Link>
+                 
+
                 <Typography component="h1" variant="h4" sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)'}}>
                     Sign in
                 </Typography>
@@ -206,7 +211,7 @@ const validateInputs = ()=>{
                 <Typography sx={{ textAlign: 'center'}}>
                 Don&apos;t have an account?{' '}
                         <Link 
-                        href='lien vers crer un compte'
+                        to="/Sign-up"
                         variant='body2'
                         sx={{alignSelf: 'center'}}
                         >
