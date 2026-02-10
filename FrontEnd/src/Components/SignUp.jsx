@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
@@ -12,9 +14,12 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
+import Alert from '@mui/material/Alert';
+import CircularProgress from '@mui/material/CircularProgress';
 import { GoogleIcon,FacebookIcon,SitemarkIcon } from './CustomIcon.jsx'
-import { useState } from 'react';
  import { Link as RouterLink } from 'react-router-dom';
+ import {useAuth} from '../context/AuthContext.jsx'
+
 const Card = styled(MuiCard)(({theme})=>({
     display:'flex',
     flexDirection: 'column',
@@ -58,6 +63,9 @@ const SignUpContainer = styled(Stack)(({theme})=>({
 }));
 
 const SignUp =()=>{
+    const navigate = useNavigate()
+    const {register,loading,error,setError} = useAuth()
+
     const [emailError, setEmailError] = useState(false);
     const [emailErrorMessage, setEmailErrorMessage] = useState('');
     const [passwordError, setPasswordError] = useState(false);
@@ -71,7 +79,7 @@ const SignUp =()=>{
                 const name = document.getElementById('name')
                 let isValid = true
                             if(!email.value || !/\S+@\S+\.\S+/.test(email.value)){
-                                setEmailError(true);
+                            setEmailError(true);
                             setEmailErrorMessage('Please enter a valid email address.');
                             isValid = false;
                             } 
@@ -100,18 +108,27 @@ const SignUp =()=>{
                                 
                                 return isValid;        
                 }
-            const handleSubmit = (e)=>{
-                if (nameError || emailError || passwordError) {
+            const handleSubmit = async (e)=>{
                     e.preventDefault();
-                    return;
+                   
+                    if(!validateInputs()){
+                        return
+                    }
+                //   receive data of form
+                  const formData = new FormData(e.currentTarget);
+                  const userDAta={
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    password: formData.get('password'),
+                  };
+                  try{
+                    // call the sign-up API
+                    await register(userDAta)
+                    // redirected to dashboard after sign-up
+                    navigate('/dashboard')
+                  }catch(err){
+                    console.error('Erreur d\'inscription:',err)
                   }
-                  const data = new FormData(e.currentTarget);
-                  console.log({
-                    name: data.get('name'),
-                    lastName: data.get('lastName'),
-                    email: data.get('email'),
-                    password: data.get('password'),
-                  });
             }   
             
             return (
@@ -131,6 +148,14 @@ const SignUp =()=>{
                         Sign up
 
                     </Typography>
+
+                    {error && (
+                        <Alert severity="error" onClose={() => setError(null)}>
+                        {error}
+                        </Alert>
+                    )}
+
+
                     <Box
                     component='form'
                     onSubmit={handleSubmit}
@@ -147,8 +172,14 @@ const SignUp =()=>{
                             placeholder='Jon Snow'
                             error={nameError}
                             helperText={nameErrorMessage}
-                            color={nameError ? 'error':'primary'}/>
+                            color={nameError ? 'error':'primary'}
+                            disabled={loading}
+                        />
+
                         </FormControl>
+
+
+
                         <FormControl>
                             <FormLabel htmlFor='name'>email</FormLabel>
                             <TextField
@@ -161,8 +192,13 @@ const SignUp =()=>{
                             variant='outlined'
                             error={emailError}
                             helperText={emailErrorMessage}
-                            color={emailError ? 'error':'primary'}/>
+                            color={emailError ? 'error':'primary'}
+                            disabled={loading}
+                        />
+
                         </FormControl>
+
+
                         <FormControl>
                             <FormLabel htmlFor='name'>password</FormLabel>
                             <TextField
@@ -176,8 +212,12 @@ const SignUp =()=>{
                             placeholder='••••••'
                             error={passwordError}
                             helperText={passwordErrorMessage}
-                            color={passwordError ? 'error':'primary'}/>
+                            color={passwordError ? 'error':'primary'}
+                            disabled={loading}
+                        />
+
                         </FormControl>
+
                                 <FormControlLabel
                                 control={<Checkbox value='allowExtraEmails' color='primary'/>}
                                 label='je veux recevoir des newslater par email'
@@ -186,8 +226,8 @@ const SignUp =()=>{
                                     type="submit"
                                     fullWidth
                                     variant="contained"
-                                    onClick={validateInputs}
-                                    >Sign up
+                                    disabled={loading}
+                                    > {loading ? <CircularProgress size={24}/> :'Sign up'}
                                     </Button>
 
                     </Box>
@@ -219,7 +259,7 @@ const SignUp =()=>{
                                 >
                                     Sign in
                                 </RouterLink>
-                                </Typography>
+                        </Typography>
                     </Box>
                 </Card>
 
