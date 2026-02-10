@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
@@ -13,9 +14,12 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
+import Alert from '@mui/material/Alert';
+import CircularProgress from '@mui/material/CircularProgress';
 import { GoogleIcon,FacebookIcon,SitemarkIcon } from './CustomIcon.jsx';
 import { Link } from 'react-router-dom';
 import ForgotPassword from './ForgotPassword.jsx';
+import {useAuth} from '../context/AuthContext.jsx'
 
 const Card = styled(MuiCard)(({theme})=>({
     display:'flex',
@@ -62,6 +66,8 @@ const SignInContainer = styled(Stack)(({theme})=>({
 
 const Login = ()=>{
 
+    const navigate = useNavigate()
+    const {login,loading,error,setError} = useAuth()
   
 const [emailError, setEmailError] = useState(false)
 const [emailErrorMessage,setEmailErrorMessage] = useState('')
@@ -74,18 +80,6 @@ const handleClickOpen = ()=>{
 }
 const handleClose = ()=>{
     setOpen(false)
-}
-
-const handleSubmit = (e)=>{
-    if(emailError||passwordError){
-        e.preventDefault()
-        return
-    }
-    const data = new FormData(e.currentTarget)
-    console.log({
-        email: data.get('email'),
-        password: data.get('password'),
-    })
 }
 
 const validateInputs = ()=>{
@@ -112,7 +106,31 @@ const validateInputs = ()=>{
     return isValid
 }  
 
+const handleSubmit = async (e)=>{
+    e.preventDefault()
 
+    // remove last error
+    if(error) setError(null)
+        // valid inputs
+    if(!validateInputs()){
+        return
+    }
+
+    // take data of form
+    const formData = new FormData(e.currentTarget)
+    const credentials = {
+        email: formData.get('email'),
+        password: formData.get('password')
+    }
+    try{
+        // call API of connexion
+        await login(credentials)
+        // Redirected to dashboard after a succes connexion
+        navigate('/dashboard') 
+    }catch(err){
+        console.error('Erreur de connexion:',err)
+    }
+}
 
     return(
         <>
@@ -129,8 +147,17 @@ const validateInputs = ()=>{
                 <Typography component="h1" variant="h4" sx={{width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)'}}>
                     Sign in
                 </Typography>
-                <Box component="form" onSubmit={handleSubmit}
-                noValidate sx={{
+
+                {error && (
+                  <Alert severity="error" onClose={() => setError(null)}>
+                  {error}
+                 </Alert>
+                )}
+
+                <Box component="form" 
+                onSubmit={handleSubmit}
+                noValidate
+                 sx={{
                     display:'flex',
                     flexDirection:'column',
                     width:'100%',
@@ -151,8 +178,11 @@ const validateInputs = ()=>{
                     fullWidth
                     variant='outlined'
                     color={emailError ? 'error': 'primary'}
+                    disabled={loading}
                     />
                     </FormControl>
+
+
                     <FormControl>
                         <FormLabel htmlFor='password'>Password</FormLabel>
                         <TextField
@@ -163,30 +193,38 @@ const validateInputs = ()=>{
                         name='password'
                         placeholder='••••••'
                         autoComplete='current-password'
-                        autoFocus
+                        
                         required
                         fullWidth
                         variant='outlined'
-                        color={passwordError ? 'error' : 'primary'}/>
+                        color={passwordError ? 'error' : 'primary'}
+                        disabled={loading}/>
                     </FormControl>
+
+
                     <FormControlLabel
                         control={<Checkbox value='remember' color='primary'/>}
                         label='Remember me'
                         />
+
+
                         <ForgotPassword open={open} handleClose={handleClose}/>
                         <Button
                         type='submit'
                         fullWidth
                         variant='contained'
-                        onClick={validateInputs}>
-                            Sign in
+                        disabled={loading}
+                        >
+                           {loading ? <CircularProgress size={24}/>: 'Sign in'}
                         </Button>
+
                         <Link
                         component='button'
                         type='button'
                         onClick={handleClickOpen}
                         variant='body2'
-                        sx={{alignSelf: 'center'}}>
+                        sx={{alignSelf: 'center'}}
+                        >
                             Forgot your password?
                         </Link>
                 </Box>
