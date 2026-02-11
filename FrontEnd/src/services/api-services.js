@@ -1,4 +1,4 @@
-import { forgotPassword, getProfil } from "../../../Backend/controllers/authController"
+
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:2000/api'
 
@@ -70,7 +70,7 @@ export const authAPI = {
         // save the token and user
         if(data.token){
             localStorage.setItem('token',data.token)
-            localStorage.setItem('user', data.JSON.stringify({
+            localStorage.setItem('user',JSON.stringify({
                 id: data._id,
                 name: data.name,
                 email: data.email

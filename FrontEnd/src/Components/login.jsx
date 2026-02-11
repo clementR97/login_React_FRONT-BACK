@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -67,8 +67,18 @@ const SignInContainer = styled(Stack)(({theme})=>({
 const Login = ()=>{
 
     const navigate = useNavigate()
-    const {login,loading,error,setError} = useAuth()
+    const {user,login,loading,error,setError} = useAuth()
   
+
+    // useEffect(()=>{
+    //     if(user){
+    //         console.log('✅ User détecté, redirection...')
+    //         navigate('/dashboard',{replace:true})
+    //     }
+    // },[user,navigate])
+
+
+
 const [emailError, setEmailError] = useState(false)
 const [emailErrorMessage,setEmailErrorMessage] = useState('')
 const [passwordError,setPasswordError] = useState(false)
@@ -108,11 +118,12 @@ const validateInputs = ()=>{
 
 const handleSubmit = async (e)=>{
     e.preventDefault()
-
+    console.log('🔄 Formulaire soumis');
     // remove last error
     if(error) setError(null)
         // valid inputs
     if(!validateInputs()){
+        console.log('❌ Validation échouée');
         return
     }
 
@@ -122,11 +133,16 @@ const handleSubmit = async (e)=>{
         email: formData.get('email'),
         password: formData.get('password')
     }
+    console.log('📤 Envoi des données:', credentials);
     try{
         // call API of connexion
-        await login(credentials)
+        const result= await login(credentials)
+        console.log('✅ Connexion réussie:', result);
+        console.log('🚀 Navigation vers dashboard');
+
         // Redirected to dashboard after a succes connexion
-        navigate('/dashboard') 
+        //window.location.href = '/dashboard';
+          navigate('/dashboard', {replace:true}) 
     }catch(err){
         console.error('Erreur de connexion:',err)
     }

@@ -42,14 +42,21 @@ export const AuthProvider = ({children})=>{
         try{
             setError(null)
             setLoading(true)
+            console.log('🔐 AuthContext - Tentative de connexion');
+
             const data = await authAPI.login(credentials)
+            console.log('✅ AuthContext - Données reçues:', data);
+
             setUser({
                 _id:data._id,
                 name: data.name,
                 email:data.email,
             })
+            console.log('👤 AuthContext - User set:', user);
+
             return data 
         }catch(err){
+            console.error('❌ AuthContext - Erreur:', err);
             setError(err.message)
             throw err
         }finally{
@@ -111,7 +118,8 @@ export const AuthProvider = ({children})=>{
         user,
         loading,
         error,
-        isAuthenticated: !user,
+        // modification la isAuthenticated: !user,
+        isAuthenticated: !!user,
         login,
         register,
         logout,

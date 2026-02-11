@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { replace, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
@@ -125,7 +125,7 @@ const SignUp =()=>{
                     // call the sign-up API
                     await register(userDAta)
                     // redirected to dashboard after sign-up
-                    navigate('/dashboard')
+                    navigate('/dashboard',{replace:true})
                   }catch(err){
                     console.error('Erreur d\'inscription:',err)
                   }
