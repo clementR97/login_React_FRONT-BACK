@@ -100,6 +100,8 @@ Projet-MERN/
 ├── Backend/
 │   ├── controllers/
 │   │   └── authController.js      # Logique métier authentification
+|   ├──config/
+│   │   └── db.js      # connexion la base de données mongodb Atlas
 │   ├── middleware/
 │   │   └── authMiddleware.js      # Protection des routes
 │   ├── models/
@@ -120,7 +122,11 @@ Projet-MERN/
     │   │   ├── Dashboard.jsx      # Espace utilisateur
     │   │   ├── ProtectedRoute.jsx # HOC pour routes protégées
     │   │   ├── ForgotPassword.jsx # Modal mot de passe oublié
-    │   │   └── CustomIcon.jsx     # Icônes personnalisées
+    │   │   ├── CustomIcon.jsx     # Icônes personnalisées
+    │   │   └── ComponentAccueil/
+    │   │   │   ├──Navbar.jsx
+    │   │   │   ├──Hero.jsx
+    │   │   │   ├──Footer.jsx
     │   ├── context/
     │   │   └── AuthContext.jsx    # Context d'authentification
     │   ├── services/
@@ -191,16 +197,33 @@ const userSchema = new mongoose.Schema({
 ```javascript
 // Middleware de protection des routes
 export const protect = async (req, res, next) => {
-    let token;
-    if (req.headers.authorization?.startsWith('Bearer')) {
-        token = req.headers.authorization.split(' ')[1];
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = await User.findById(decoded.id).select('-password');
-        next();
-    } else {
-        res.status(401).json({ message: 'Non autorisé' });
+    if(
+        req.headers.authorization && 
+        req.headers.authorization.startsWith('Bearer')
+    ){
+        try{
+            // Recover the token (format: "Bearer token")
+            token = req.headers.authorization.split(' ')[1]
+            //verifie and decod the token
+            const decoded = jwt.verify(token,process.env.JWT_SECRET)
+
+            // Add user in the request( without the password)
+            req.user = await User.findById(decoded.id).select('-password')
+
+            if(!req.user){
+                return res.status(401).json({message:'Utilisateur non trouvé'})
+            }
+            next()
+
+        }catch(error){
+            console.error('Erreur auth middleware:',error)
+            res.status(401).json({message: 'Non autorisé, token invalide'})
+        }
     }
-};
+    if(!token){
+        res.status(401).json({message:'Non autorisé, pas de token'})
+    }
+}
 ```
 - Implémentation de JWT pour l'authentification stateless
 - Protection des routes sensibles
@@ -342,8 +365,8 @@ graph LR
 
 ### 1. Cloner le projet
 ```bash
-git clone https://github.com/votre-username/projet-mern-auth.git
-cd projet-mern-auth
+git clone https://github.com/clementR97/login_React_FRONT-BACK.git
+cd login_React_FRONT-BACK
 ```
 
 ### 2. Configuration Backend
@@ -405,35 +428,32 @@ npm run dev
 *Page d'accueil avec navigation vers Login et Sign Up*
 
 ### Inscription (Sign Up)
-![Sign Up](./screenshots/signup.png)
+![Sign Up](./screenshoot/Sign-up.png)
 *Formulaire d'inscription avec validation en temps réel*
 
 ### Connexion (Sign In)
-![Sign In](./screenshots/signin.png)
+![Sign In](./screenshoot/login.png)
 *Formulaire de connexion sécurisé*
 
 ### Mot de passe oublié
-![Forgot Password](./screenshots/forgot-password.png)
+![Forgot Password](./screenshoot/fogot-password.png)
 *Modal pour réinitialiser le mot de passe*
 
-### Dashboard (Espace utilisateur)
-![Dashboard](./screenshots/dashboard.png)
+### Dashboard / Validation des formulaires (Espace utilisateur)
+![Dashboard,Validation](./screenshoot/dashboard.png)
 *Espace personnel de l'utilisateur connecté*
-
-### Validation des formulaires
-![Validation](./screenshots/validation.png)
 *Messages d'erreur en temps réel*
 
 ### MongoDB Atlas
-![MongoDB](./screenshots/mongodb.png)
+![MongoDB](./screenshoot/mongodb.png)
 *Utilisateurs stockés dans MongoDB*
 
 ### Console réseau
-![Network](./screenshots/network.png)
+![Network](./screenshoot/network.png)
 *Requêtes API avec token JWT dans les headers*
 
 ### LocalStorage
-![LocalStorage](./screenshots/localstorage.png)
+![LocalStorage](./screenshoot/localhost.png)
 *Token et données utilisateur stockés localement*
 
 ---
@@ -543,17 +563,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 - [JWT](https://jwt.io/)
 
 ### Tutoriels suivis
-- [MERN Stack Tutorial - Traversy Media](https://www.youtube.com/watch?v=...)
-- [JWT Authentication - Web Dev Simplified](https://www.youtube.com/watch?v=...)
 - [React Context API - React Documentation](https://react.dev/learn/passing-data-deeply-with-context)
 
 ---
 
 ## 👨‍💻 Auteur
 
-**Clément R.**
-- GitHub: [@votre-username](https://github.com/votre-username)
-- Portfolio: [votre-portfolio.com](https://votre-portfolio.com)
+**Clément Roland.**
+- GitHub: [@clementR97](https://github.com/clementR97)
+
 
 ---
 
@@ -575,8 +593,8 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 ## 💬 Support
 
 Pour toute question ou problème :
-- Ouvrez une [issue](https://github.com/votre-username/projet-mern-auth/issues)
-- Contactez-moi par email : votre.email@example.com
+- Ouvrez une [issue](https://github.com/clementR97/login_React_FRONT-BACK/issues)
+- Contactez-moi par email : clementroland52@gmail.com
 
 ---
 
