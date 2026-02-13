@@ -424,7 +424,7 @@ npm run dev
 ## 📸 Captures d'écran
 
 ### Page d'accueil
-![Accueil](./screenshots/Accueil.png)
+![Accueil](./screenshoot/Accueil.png)
 *Page d'accueil avec navigation vers Login et Sign Up*
 
 ### Inscription (Sign Up)
